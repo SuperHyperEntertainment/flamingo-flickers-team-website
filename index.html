@@ -1,30 +1,102 @@
-<main class="content">
-    <section id="page-dash" class="page active">
-        <h1 class="animate-slide">Studio Dashboard</h1>
-        <div class="grid">
-            <div class="card animate-pop">
-                <h3>Scene Tracker</h3>
-                <div id="scene-list">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniHub | Animation Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-mode">
+
+    <div id="login-screen" class="screen active">
+        <div class="login-card animate-pop">
+            <div class="logo-icon">A</div>
+            <h1>AniHub Studio</h1>
+            <div class="input-group">
+                <input type="text" id="username-input" placeholder="Artist Name" autocomplete="off">
+                <input type="password" id="pass-input" placeholder="Password">
+            </div>
+            <button class="btn-primary" onclick="checkLogin()">Enter Studio</button>
+            <p id="error" class="error-text">Invalid Credentials</p>
+        </div>
+    </div>
+
+    <div id="main-app" class="screen">
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="avatar-ring">
+                    <div class="avatar-core"></div>
+                </div>
+                <h2 id="welcome-msg">Hi, Artist</h2>
+                <span class="status-tag">Online</span>
+            </div>
+            
+            <nav class="nav-links">
+                <button class="nav-item active" onclick="showPage('dash', this)">🏠 Dashboard</button>
+                <button class="nav-item" onclick="showPage('scenes', this)">🎬 Scene Tracker</button>
+                <button class="nav-item" onclick="showPage('analytics', this)">📊 Analytics</button>
+                <button class="nav-item" onclick="showPage('custom', this)">🎨 Customize</button>
+            </nav>
+
+            <button class="btn-logout" onclick="location.reload()">Sign Out</button>
+        </aside>
+
+        <main class="content">
+            <section id="page-dash" class="page active">
+                <h1 class="page-title">Studio Overview</h1>
+                <div class="stats-row">
+                    <div class="mini-card">
+                        <span>Active Projects</span>
+                        <h2>4</h2>
                     </div>
-            </div>
-            <div class="card animate-pop" style="animation-delay: 0.1s">
-                <h3>Production Note</h3>
-                <p>Ensure all cache files are cleared before pushing to the render farm.</p>
-            </div>
-        </div>
-    </section>
+                    <div class="mini-card">
+                        <span>Due Date</span>
+                        <h2>Oct 12</h2>
+                    </div>
+                </div>
+            </section>
 
-    <section id="page-analytics" class="page">
-        <h1 class="animate-slide">Live Stats</h1>
-        <div class="grid">
-            <div class="card">
-                <h3>Rendering Progress</h3>
-                <h2 class="stat-text">88%</h2>
-                <div class="progress-bar"><div class="progress" style="width: 88%"></div></div>
-            </div>
-        </div>
-    </section>
+            <section id="page-scenes" class="page">
+                <h1 class="page-title">Scene Pipeline</h1>
+                <div class="card">
+                    <div id="scene-list">
+                        </div>
+                </div>
+            </section>
 
-    <section id="page-custom" class="page">
-        </section>
-</main>
+            <section id="page-analytics" class="page">
+                <h1 class="page-title">Production Metrics</h1>
+                <div class="card">
+                    <h3>Render Time Calculator</h3>
+                    <div class="calc-row">
+                        <input type="number" id="calc-frames" placeholder="Total Frames">
+                        <input type="number" id="calc-sec" placeholder="Sec per Frame">
+                        <button class="btn-secondary" onclick="calculateRender()">Calculate</button>
+                    </div>
+                    <p id="calc-result" style="margin-top:15px; font-weight:bold; color:var(--accent);"></p>
+                </div>
+            </section>
+
+            <section id="page-custom" class="page">
+                <h1 class="page-title">Interface Settings</h1>
+                <div class="card">
+                    <h3>Theme Mode</h3>
+                    <button class="btn-secondary" onclick="toggleTheme()">Toggle Light/Dark</button>
+                </div>
+                <div class="card">
+                    <h3>Accent Color</h3>
+                    <div class="color-picker">
+                        <div class="dot blue" onclick="changeAccent('#3b82f6')"></div>
+                        <div class="dot purple" onclick="changeAccent('#a855f7')"></div>
+                        <div class="dot green" onclick="changeAccent('#22c55e')"></div>
+                        <div class="dot orange" onclick="changeAccent('#f97316')"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
