@@ -1,88 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AniHub | Team Portal</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="dark-mode" id="body-tag">
-
-    <div id="login-screen" class="screen active">
-        <div class="glass-card animate-pop">
-            <h1>AniHub</h1>
-            <p>Enter your team password</p>
-            <input type="text" id="username-input" placeholder="Your Name">
-            <input type="password" id="pass-input" placeholder="Team Password">
-            <button onclick="checkLogin()">Enter Studio</button>
-            <p id="error" style="color: #ff7b72; margin-top: 10px; display: none;">Incorrect Password</p>
-        </div>
-    </div>
-
-    <div id="main-app" class="screen">
-        <aside class="sidebar">
-            <div class="nav-header">
-                <div class="avatar"></div>
-                <h2 id="welcome-msg">Hi, User</h2>
+<main class="content">
+    <section id="page-dash" class="page active">
+        <h1 class="animate-slide">Studio Dashboard</h1>
+        <div class="grid">
+            <div class="card animate-pop">
+                <h3>Scene Tracker</h3>
+                <div id="scene-list">
+                    </div>
             </div>
-            <nav>
-                <button onclick="showPage('dash')">📊 Dashboard</button>
-                <button onclick="showPage('analytics')">📈 Analytics</button>
-                <button onclick="showPage('custom')">🎨 Appearance</button>
-            </nav>
-            <button class="logout-btn" onclick="location.reload()">Logout</button>
-        </aside>
+            <div class="card animate-pop" style="animation-delay: 0.1s">
+                <h3>Production Note</h3>
+                <p>Ensure all cache files are cleared before pushing to the render farm.</p>
+            </div>
+        </div>
+    </section>
 
-        <main class="content">
-            <section id="page-dash" class="page active">
-                <h1 class="animate-slide">Team Dashboard</h1>
-                <div class="grid">
-                    <div class="card animate-pop">
-                        <h3>Current Project</h3>
-                        <p>Scene 04 - Final Render</p>
-                        <div class="progress-bar"><div class="progress" style="width: 75%"></div></div>
-                    </div>
-                    <div class="card animate-pop" style="animation-delay: 0.1s">
-                        <h3>Announcements</h3>
-                        <p>Meeting today at 4PM regarding the lighting pass!</p>
-                    </div>
-                </div>
-            </section>
+    <section id="page-analytics" class="page">
+        <h1 class="animate-slide">Live Stats</h1>
+        <div class="grid">
+            <div class="card">
+                <h3>Rendering Progress</h3>
+                <h2 class="stat-text">88%</h2>
+                <div class="progress-bar"><div class="progress" style="width: 88%"></div></div>
+            </div>
+        </div>
+    </section>
 
-            <section id="page-analytics" class="page">
-                <h1 class="animate-slide">Production Analytics</h1>
-                <div class="grid" id="analytics-container">
-                    <div class="card">
-                        <h3>Total Frames Rendered</h3>
-                        <h2 class="stat-text">14,202</h2>
-                    </div>
-                    <div class="card">
-                        <h3>Active Animators</h3>
-                        <h2 class="stat-text">8</h2>
-                    </div>
-                </div>
-            </section>
-
-            <section id="page-custom" class="page">
-                <h1 class="animate-slide">Customize Your POV</h1>
-                <div class="card">
-                    <h3>Theme Toggle</h3>
-                    <button onclick="toggleTheme()">Switch Light / Dark Mode</button>
-                    <p style="font-size: 12px; margin-top: 10px; opacity: 0.7;">Note: Preferences reset on refresh.</p>
-                </div>
-                <div class="card">
-                    <h3>Accent Color</h3>
-                    <div class="color-picker">
-                        <div class="dot blue" onclick="changeAccent('#79c0ff')"></div>
-                        <div class="dot green" onclick="changeAccent('#7ee787')"></div>
-                        <div class="dot purple" onclick="changeAccent('#d2a8ff')"></div>
-                        <div class="dot orange" onclick="changeAccent('#ffa657')"></div>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+    <section id="page-custom" class="page">
+        </section>
+</main>
