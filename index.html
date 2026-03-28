@@ -2,90 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AniHub | Team Portal</title>
-    <link rel="stylesheet" href="style.css">
+    <title>AniHub Test</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { background: #0b0e14; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: #161b22; padding: 2rem; border-radius: 8px; border: 1px solid #30363d; text-align: center; }
+        button { background: #79c0ff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    </style>
 </head>
-<body class="dark-mode">
+<body>
 
-    <div id="login-screen" class="screen active">
-        <div class="glass-card">
-            <h1>Login Page</h1>
-            <p>Please enter a valid email and password. If you do not have an account, contact an admin. V1</p>
-            <input type="email" id="login-email" placeholder="Email">
-            <input type="password" id="login-pass" placeholder="Password">
-            <button id="btn-login">Enter Studio</button>
-            <p id="auth-error" class="error"></p>
-        </div>
+    <div class="box">
+        <h1>Animation Hub</h1>
+        <p>If you see this, the HTML is loading.</p>
+        <button id="test-btn">Click for Heartbeat</button>
     </div>
 
-    <div id="main-app" class="screen">
-        <aside class="sidebar">
-            <div class="user-info">
-                <img id="user-avatar" src="" alt="PFP">
-                <h2 id="display-name">Artist</h2>
-                <span id="user-role" class="badge">Member</span>
-            </div>
-            <nav>
-                <button onclick="showPage('dash')">📊 Dashboard</button>
-                <button onclick="showPage('chat')">💬 Team Chat</button>
-                <button onclick="showPage('settings')">⚙️ Settings</button>
-                <button id="admin-link" onclick="showPage('admin')" style="display:none;">🛡️ Admin</button>
-            </nav>
-            <button id="btn-logout" class="btn-secondary">Logout</button>
-        </aside>
-
-        <main class="content-area">
-            <section id="page-dash" class="page active">
-                <h1>Dashboard</h1>
-                <div class="stats-row">
-                    <div class="stat-card">
-                        <h3>Team Status</h3>
-                        <p id="announcement-text">Loading announcement...</p>
-                    </div>
-                </div>
-            </section>
-
-            <section id="page-chat" class="page">
-                <h1>Team Chat</h1>
-                <div class="chat-wrapper">
-                    <div id="chat-messages"></div>
-                    <div class="chat-input">
-                        <input type="text" id="msg-input" placeholder="Type a message...">
-                        <button id="btn-send">Send</button>
-                    </div>
-                </div>
-            </section>
-
-            <section id="page-settings" class="page">
-                <h1>Settings</h1>
-                <div class="settings-grid">
-                    <div class="card">
-                        <h3>Visuals</h3>
-                        <button onclick="toggleTheme()">Toggle Light/Dark Mode</button>
-                    </div>
-                    <div class="card">
-                        <h3>Profile</h3>
-                        <input type="text" id="new-pfp" placeholder="New PFP Image URL">
-                        <button id="btn-update-pfp">Update Avatar</button>
-                    </div>
-                </div>
-            </section>
-
-            <section id="page-admin" class="page">
-                <h1>Admin Command</h1>
-                <div class="card">
-                    <h3>Global Announcement</h3>
-                    <textarea id="new-announcement" placeholder="Update everyone's dashboard..."></textarea>
-                    <button id="btn-push-admin">Push Update</button>
-                </div>
-            </section>
-        </main>
-    </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <script src="app.js"></script>
+    <script>
+        // 2. THE LOGIC (Inside the HTML so it can't get lost)
+        window.onload = () => {
+            alert("SUCCESS: The script is running!");
+            
+            const btn = document.getElementById('test-btn');
+            btn.onclick = () => {
+                alert("The button is alive!");
+            };
+        };
+    </script>
 </body>
 </html>
