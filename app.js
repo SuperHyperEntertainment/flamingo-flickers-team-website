@@ -1,5 +1,5 @@
 const SB_URL = "https://mrzrpfqwwmtvokwgrsmp.supabase.co";
-const SB_KEY = "sb_publishable_1U1aqAdoHA2Rc9fN7BOCag_Dd5e-Enf";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1yenJwZnF3d210dm9rd2dyc21wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3MjU4NzAsImV4cCI6MjA5MDMwMTg3MH0.7elt-Cn3Y0ZwoiXICkQQ_bJNhS3GWIXKGMxzy4t_whc";
 const supabase = window.supabase.createClient(SB_URL, SB_KEY);
 
 let myProfile = null;
