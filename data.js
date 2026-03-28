@@ -2,7 +2,7 @@
 
 const USERS = [
     { username: 'HexxedDev', password: '326214Green?', name: 'Patrick Kaiser', role: 'Project Director' },
-    { username: 'AVERAGE_', password: 'Yourmomlmao:3', name: 'Lucas', role: 'Voice Actor' },
+    { username: 'AVERAGE_', password: 'Yourmomlmao:3', name: 'Lukas', role: 'Voice Actor' },
     { username: 'lighter2', password: 'lightpass', name: 'Jordan Lee', role: 'Lighting Artist' },
     { username: 'voiceactor1', password: 'miccheck', name: 'Casey Smith', role: 'Voice Talent' }
 ];
