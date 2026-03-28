@@ -3,186 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        /* CSS STYLES */
-        :root { --bg: #0b0e14; --card: #161b22; --accent: #79c0ff; --text: #c9d1d9; --border: #30363d; }
-        body.light-mode { --bg: #f0f2f5; --card: #ffffff; --accent: #0969da; --text: #1f2328; --border: #d0d7de; }
-        * { box-sizing: border-box; transition: 0.2s; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; }
-        .screen { display: none; height: 100vh; width: 100%; }
-        .screen.active { display: flex; }
-        
-        /* Login */
-        #login-screen { justify-content: center; align-items: center; flex-direction: column; }
-        .login-card { background: var(--card); padding: 40px; border-radius: 12px; border: 1px solid var(--border); width: 320px; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
-        button { width: 100%; padding: 10px; border-radius: 6px; border: none; background: var(--accent); color: white; font-weight: bold; cursor: pointer; }
-
-        /* Main App */
-        .sidebar { width: 240px; background: var(--card); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; }
-        .content { flex: 1; padding: 40px; overflow-y: auto; }
-        .page { display: none; }
-        .page.active { display: block; }
-        
-        /* Chat */
-        #chat-box { height: 300px; border: 1px solid var(--border); overflow-y: auto; padding: 10px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 5px; }
-        .msg { padding: 8px; border-radius: 4px; background: var(--border); width: fit-content; }
-        .msg.me { align-self: flex-end; background: var(--accent); color: white; }
-    </style>
+    <title>AniHub | Team Portal</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="dark-mode" id="body-tag">
 
     <div id="login-screen" class="screen active">
-        <div class="login-card">
-            <h2>Login to your account</h2>
-            <input type="email" id="email" placeholder="Email">
-            <input type="password" id="pass" placeholder="Password">
-            <button id="btn-login">Login</button>
-            <p id="error-log" style="color:red; font-size:12px;"></p>
+        <div class="glass-card animate-pop">
+            <h1>AniHub</h1>
+            <p>Enter your team password</p>
+            <input type="text" id="username-input" placeholder="Your Name">
+            <input type="password" id="pass-input" placeholder="Team Password">
+            <button onclick="checkLogin()">Enter Studio</button>
+            <p id="error" style="color: #ff7b72; margin-top: 10px; display: none;">Incorrect Password</p>
         </div>
     </div>
 
-    <div id="app-screen" class="screen">
+    <div id="main-app" class="screen">
         <aside class="sidebar">
-            <h3 id="user-display">User</h3>
-            <hr style="width:100%; border:0; border-top:1px solid var(--border)">
-            <button onclick="showPage('dash')">Dashboard</button><br>
-            <button onclick="showPage('chat')">Chat</button><br>
-            <button onclick="showPage('admin')" id="admin-btn" style="display:none;">Admin Panel</button>
-            <button onclick="location.reload()" style="margin-top:auto; background:#ff7b72">Logout</button>
+            <div class="nav-header">
+                <div class="avatar"></div>
+                <h2 id="welcome-msg">Hi, User</h2>
+            </div>
+            <nav>
+                <button onclick="showPage('dash')">📊 Dashboard</button>
+                <button onclick="showPage('analytics')">📈 Analytics</button>
+                <button onclick="showPage('custom')">🎨 Appearance</button>
+            </nav>
+            <button class="logout-btn" onclick="location.reload()">Logout</button>
         </aside>
+
         <main class="content">
-            <div id="page-dash" class="page active">
-                <h1>Dashboard</h1>
-                <div style="padding:20px; border:1px solid var(--border); border-radius:8px;">
-                    <h3>Team Announcement:</h3>
-                    <p id="announcement">Loading...</p>
+            <section id="page-dash" class="page active">
+                <h1 class="animate-slide">Team Dashboard</h1>
+                <div class="grid">
+                    <div class="card animate-pop">
+                        <h3>Current Project</h3>
+                        <p>Scene 04 - Final Render</p>
+                        <div class="progress-bar"><div class="progress" style="width: 75%"></div></div>
+                    </div>
+                    <div class="card animate-pop" style="animation-delay: 0.1s">
+                        <h3>Announcements</h3>
+                        <p>Meeting today at 4PM regarding the lighting pass!</p>
+                    </div>
                 </div>
-            </div>
-            <div id="page-chat" class="page">
-                <h1>Team Chat</h1>
-                <div id="chat-box"></div>
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="chat-input" placeholder="Say something...">
-                    <button id="send-btn" style="width:80px;">Send</button>
+            </section>
+
+            <section id="page-analytics" class="page">
+                <h1 class="animate-slide">Production Analytics</h1>
+                <div class="grid" id="analytics-container">
+                    <div class="card">
+                        <h3>Total Frames Rendered</h3>
+                        <h2 class="stat-text">14,202</h2>
+                    </div>
+                    <div class="card">
+                        <h3>Active Animators</h3>
+                        <h2 class="stat-text">8</h2>
+                    </div>
                 </div>
-            </div>
-            <div id="page-admin" class="page">
-                <h1>Admin Panel</h1>
-                <input type="text" id="new-ann" placeholder="New announcement text">
-                <button onclick="updateAnn()">Update Announcement</button>
-            </div>
+            </section>
+
+            <section id="page-custom" class="page">
+                <h1 class="animate-slide">Customize Your POV</h1>
+                <div class="card">
+                    <h3>Theme Toggle</h3>
+                    <button onclick="toggleTheme()">Switch Light / Dark Mode</button>
+                    <p style="font-size: 12px; margin-top: 10px; opacity: 0.7;">Note: Preferences reset on refresh.</p>
+                </div>
+                <div class="card">
+                    <h3>Accent Color</h3>
+                    <div class="color-picker">
+                        <div class="dot blue" onclick="changeAccent('#79c0ff')"></div>
+                        <div class="dot green" onclick="changeAccent('#7ee787')"></div>
+                        <div class="dot purple" onclick="changeAccent('#d2a8ff')"></div>
+                        <div class="dot orange" onclick="changeAccent('#ffa657')"></div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
-    <script>
-    // 1. CONFIGURATION (Paste your real info inside the quotes)
-    const SB_URL = "PASTE_YOUR_SUPABASE_URL_HERE"; 
-    const SB_KEY = "PASTE_YOUR_ANON_KEY_HERE";
-
-    // 2. THE KEY CHECKER
-    // This runs immediately to see if you forgot to swap the placeholder text
-    if (SB_URL.includes("PASTE_YOUR") || SB_KEY.includes("PASTE_YOUR") || SB_URL === "" || SB_KEY === "") {
-        alert("⚠️ SETUP ERROR: You haven't added your Supabase Keys yet! \n\nPlease go to app.js (or index.html) and paste your Project URL and Anon Key.");
-        console.error("Missing Supabase Configuration. The app will not function.");
-    }
-
-    // Initialize Supabase
-    const supabase = window.supabase.createClient(SB_URL, SB_KEY);
-    let myProfile = null;
-
-    // LOGIN LOGIC
-    document.getElementById('btn-login').onclick = async () => {
-        // Double check keys again on click just in case
-        if (SB_URL.includes("PASTE_YOUR")) {
-            alert("Stop! You are still using the default 'PASTE_YOUR' text. Please go to Supabase Settings > API to get your real keys.");
-            return;
-        }
-
-        const email = document.getElementById('email').value;
-        const pass = document.getElementById('pass').value;
-
-        if (!email || !pass) {
-            alert("Please enter both an email and a password.");
-            return;
-        }
-
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
-        
-        if (error) {
-            document.getElementById('error-log').innerText = "Login Failed: " + error.message;
-            return;
-        }
-
-        // Fetch Profile
-        const { data: profile, error: pError } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', data.user.id)
-            .single();
-
-        if (pError || !profile) {
-            alert("Auth Successful, but no Profile found! \n\nCheck your 'profiles' table in Supabase and make sure your User ID is added there.");
-            return;
-        }
-
-        myProfile = profile;
-        startApp();
-    };
-
-    function startApp() {
-        document.getElementById('login-screen').classList.remove('active');
-        document.getElementById('app-screen').classList.add('active');
-        document.getElementById('user-display').innerText = myProfile.username;
-        
-        if (myProfile.role === 'admin') document.getElementById('admin-btn').style.display = 'block';
-
-        loadData();
-        listenRealtime();
-    }
-
-    function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('page-' + id).classList.add('active');
-    }
-
-    async function loadData() {
-        const { data } = await supabase.from('settings').select('announcement').eq('id', 1).single();
-        if (data) document.getElementById('announcement').innerText = data.announcement;
-        
-        const { data: msgs } = await supabase.from('messages').select('*').order('created_at', {ascending: true});
-        if (msgs) msgs.forEach(addMsg);
-    }
-
-    function listenRealtime() {
-        supabase.channel('room1').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (p) => addMsg(p.new)).subscribe();
-        supabase.channel('room2').on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'settings' }, (p) => {
-            document.getElementById('announcement').innerText = p.new.announcement;
-        }).subscribe();
-    }
-
-    document.getElementById('send-btn').onclick = async () => {
-        const input = document.getElementById('chat-input');
-        if (!input.value.trim()) return;
-        await supabase.from('messages').insert([{ sender_name: myProfile.username, content: input.value }]);
-        input.value = "";
-    };
-
-    function addMsg(msg) {
-        const box = document.getElementById('chat-box');
-        const div = document.createElement('div');
-        div.className = `msg ${msg.sender_name === myProfile.username ? 'me' : ''}`;
-        div.innerHTML = `<b>${msg.sender_name}:</b> ${msg.content}`;
-        box.appendChild(div);
-        box.scrollTop = box.scrollHeight;
-    }
-
-    async function updateAnn() {
-        const val = document.getElementById('new-ann').value;
-        const { error } = await supabase.from('settings').update({ announcement: val }).eq('id', 1);
-        if (error) alert("Error updating: " + error.message);
-        else alert("Announcement updated for the whole team!");
-    }
-</script>
+    <script src="script.js"></script>
+</body>
+</html>
