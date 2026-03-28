@@ -2,32 +2,170 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AniHub Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniHub | Team Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { background: #0b0e14; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { background: #161b22; padding: 2rem; border-radius: 8px; border: 1px solid #30363d; text-align: center; }
-        button { background: #79c0ff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        /* CSS STYLES */
+        :root { --bg: #0b0e14; --card: #161b22; --accent: #79c0ff; --text: #c9d1d9; --border: #30363d; }
+        body.light-mode { --bg: #f0f2f5; --card: #ffffff; --accent: #0969da; --text: #1f2328; --border: #d0d7de; }
+        * { box-sizing: border-box; transition: 0.2s; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; }
+        .screen { display: none; height: 100vh; width: 100%; }
+        .screen.active { display: flex; }
+        
+        /* Login */
+        #login-screen { justify-content: center; align-items: center; flex-direction: column; }
+        .login-card { background: var(--card); padding: 40px; border-radius: 12px; border: 1px solid var(--border); width: 320px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+        button { width: 100%; padding: 10px; border-radius: 6px; border: none; background: var(--accent); color: white; font-weight: bold; cursor: pointer; }
+
+        /* Main App */
+        .sidebar { width: 240px; background: var(--card); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; }
+        .content { flex: 1; padding: 40px; overflow-y: auto; }
+        .page { display: none; }
+        .page.active { display: block; }
+        
+        /* Chat */
+        #chat-box { height: 300px; border: 1px solid var(--border); overflow-y: auto; padding: 10px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .msg { padding: 8px; border-radius: 4px; background: var(--border); width: fit-content; }
+        .msg.me { align-self: flex-end; background: var(--accent); color: white; }
     </style>
 </head>
 <body>
 
-    <div class="box">
-        <h1>Animation Hub</h1>
-        <p>If you see this, the HTML is loading.</p>
-        <button id="test-btn">Click for Heartbeat</button>
+    <div id="login-screen" class="screen active">
+        <div class="login-card">
+            <h2>AniHub Login</h2>
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="pass" placeholder="Password">
+            <button id="btn-login">Enter Studio</button>
+            <p id="error-log" style="color:red; font-size:12px;"></p>
+        </div>
+    </div>
+
+    <div id="app-screen" class="screen">
+        <aside class="sidebar">
+            <h3 id="user-display">User</h3>
+            <hr style="width:100%; border:0; border-top:1px solid var(--border)">
+            <button onclick="showPage('dash')">Dashboard</button><br>
+            <button onclick="showPage('chat')">Chat</button><br>
+            <button onclick="showPage('admin')" id="admin-btn" style="display:none;">Admin Panel</button>
+            <button onclick="location.reload()" style="margin-top:auto; background:#ff7b72">Logout</button>
+        </aside>
+        <main class="content">
+            <div id="page-dash" class="page active">
+                <h1>Dashboard</h1>
+                <div style="padding:20px; border:1px solid var(--border); border-radius:8px;">
+                    <h3>Team Announcement:</h3>
+                    <p id="announcement">Loading...</p>
+                </div>
+            </div>
+            <div id="page-chat" class="page">
+                <h1>Team Chat</h1>
+                <div id="chat-box"></div>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="chat-input" placeholder="Say something...">
+                    <button id="send-btn" style="width:80px;">Send</button>
+                </div>
+            </div>
+            <div id="page-admin" class="page">
+                <h1>Admin Panel</h1>
+                <input type="text" id="new-ann" placeholder="New announcement text">
+                <button onclick="updateAnn()">Update Announcement</button>
+            </div>
+        </main>
     </div>
 
     <script>
-        // 2. THE LOGIC (Inside the HTML so it can't get lost)
-        window.onload = () => {
-            alert("SUCCESS: The script is running!");
+        // CONFIGURATION
+        const SB_URL = "PASTE_YOUR_SUPABASE_URL_HERE"; 
+        const SB_KEY = "PASTE_YOUR_ANON_KEY_HERE";
+        const supabase = window.supabase.createClient(SB_URL, SB_KEY);
+
+        let myProfile = null;
+
+        // LOGIN LOGIC
+        document.getElementById('btn-login').onclick = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
             
-            const btn = document.getElementById('test-btn');
-            btn.onclick = () => {
-                alert("The button is alive!");
-            };
+            if (error) {
+                document.getElementById('error-log').innerText = error.message;
+                return;
+            }
+
+            // Fetch Profile
+            const { data: profile, error: pError } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', data.user.id)
+                .single();
+
+            if (pError || !profile) {
+                alert("Login okay, but no Profile found. Add your User ID to the profiles table!");
+                return;
+            }
+
+            myProfile = profile;
+            startApp();
         };
+
+        function startApp() {
+            document.getElementById('login-screen').classList.remove('active');
+            document.getElementById('app-screen').classList.add('active');
+            document.getElementById('user-display').innerText = myProfile.username;
+            
+            if (myProfile.role === 'admin') document.getElementById('admin-btn').style.display = 'block';
+
+            loadData();
+            listenRealtime();
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + id).classList.add('active');
+        }
+
+        async function loadData() {
+            // Load Announcement
+            const { data } = await supabase.from('settings').select('announcement').eq('id', 1).single();
+            if (data) document.getElementById('announcement').innerText = data.announcement;
+            
+            // Load Chat
+            const { data: msgs } = await supabase.from('messages').select('*').order('created_at', {ascending: true});
+            msgs.forEach(addMsg);
+        }
+
+        function listenRealtime() {
+            supabase.channel('room1').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (p) => addMsg(p.new)).subscribe();
+            supabase.channel('room2').on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'settings' }, (p) => {
+                document.getElementById('announcement').innerText = p.new.announcement;
+            }).subscribe();
+        }
+
+        document.getElementById('send-btn').onclick = async () => {
+            const input = document.getElementById('chat-input');
+            await supabase.from('messages').insert([{ sender_name: myProfile.username, content: input.value }]);
+            input.value = "";
+        };
+
+        function addMsg(msg) {
+            const box = document.getElementById('chat-box');
+            const div = document.createElement('div');
+            div.className = `msg ${msg.sender_name === myProfile.username ? 'me' : ''}`;
+            div.innerHTML = `<b>${msg.sender_name}:</b> ${msg.content}`;
+            box.appendChild(div);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        async function updateAnn() {
+            const val = document.getElementById('new-ann').value;
+            await supabase.from('settings').update({ announcement: val }).eq('id', 1);
+            alert("Updated!");
+        }
     </script>
 </body>
 </html>
