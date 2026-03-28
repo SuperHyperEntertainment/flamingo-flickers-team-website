@@ -1,7 +1,7 @@
 // Central Data Configuration
 
 const USERS = [
-    { username: 'director', password: 'password123', name: 'Alex Vance', role: 'Project Director' },
+    { username: 'HexxedDev', password: '326214Green?', name: 'Patrick Kaiser', role: 'Director, Producer and Writer' },
     { username: 'animator1', password: 'renderpass', name: 'Sam Miller', role: 'Lead Animator' },
     { username: 'lighter2', password: 'lightpass', name: 'Jordan Lee', role: 'Lighting Artist' }
 ];
