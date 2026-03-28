@@ -46,8 +46,8 @@ body {
 .screen.active { display: flex; }
 
 /* Login */
-#login-screen { justify-content: center; align-items: center; }
-.login-box { padding: 40px; width: 350px; display: flex; flex-direction: column; gap: 20px; }
+#login-screen { justify-content: center; align-items: center; padding: 20px; }
+.login-box { padding: 40px; width: 100%; max-width: 350px; display: flex; flex-direction: column; gap: 20px; }
 .input-group { display: flex; flex-direction: column; gap: 8px; }
 .input-group input { 
     padding: 12px; border-radius: 8px; border: 1px solid var(--glass-border); 
@@ -69,7 +69,7 @@ body {
 #app-screen { display: none; }
 #app-screen.active { display: flex; }
 
-#sidebar { width: 260px; padding: 24px; display: flex; flex-direction: column; margin: 16px; }
+#sidebar { width: 260px; padding: 24px; display: flex; flex-direction: column; margin: 16px; transition: transform 0.3s ease; }
 .brand { font-size: 1.5rem; font-weight: 800; color: var(--accent); margin-bottom: 40px; }
 .nav-links { list-style: none; display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
 .nav-btn {
@@ -82,6 +82,9 @@ body {
 .content-section { display: none; padding: 32px; }
 .content-section.active { display: block; animation: fadeIn 0.3s ease; }
 
+#mobile-header { display: none; }
+.mobile-only { display: none; }
+
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Dashboard Components */
@@ -89,7 +92,7 @@ body {
 .stat-card { padding: 24px; text-align: center; }
 .stat-number { font-size: 3rem; font-weight: 800; color: var(--accent); margin-top: 10px; }
 
-/* --- DASHBOARD WIDGET STYLES (UPDATED FIXES) --- */
+/* Dash Layout */
 .dash-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 24px; align-items: start; }
 .dash-widget { padding: 24px; display: flex; flex-direction: column; gap: 16px; overflow: hidden; }
 .dash-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -104,7 +107,8 @@ body {
 .task-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
 
 /* Scene Tracker Table */
-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.table-container { overflow-x: auto; margin-top: 20px; }
+table { width: 100%; border-collapse: collapse; min-width: 500px; }
 th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--glass-border); }
 th { color: var(--text-muted); font-weight: 600; }
 
@@ -143,3 +147,45 @@ th { color: var(--text-muted); font-weight: 600; }
 .info-divider { border: none; border-top: 1px solid var(--glass-border); margin: 16px 0; }
 .helpdesk-text { color: var(--text-muted); font-size: 0.9rem; line-height: 1.4; }
 .email-btn { text-decoration: none; text-align: center; display: inline-block; width: 100%; margin-top: 8px; }
+
+/* --- MOBILE RESPONSIVENESS (PHONES & TABLETS) --- */
+@media (max-width: 768px) {
+    #mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    .mobile-only { display: block; }
+
+    #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        margin: 0;
+        z-index: 999;
+        border-radius: 0;
+        background: var(--bg-color); /* Overrides glass so you can't see through to main content */
+        transform: translateX(-100%);
+        box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+    }
+
+    #sidebar.open {
+        transform: translateX(0);
+    }
+
+    #main-content {
+        padding: 16px;
+    }
+
+    .content-section {
+        padding: 16px;
+    }
+
+    .dash-layout, .info-grid {
+        grid-template-columns: 1fr; /* Forces widgets to stack instead of squish */
+    }
+}
